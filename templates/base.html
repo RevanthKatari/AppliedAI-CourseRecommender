@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MAC Course Pathfinder</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f3f4f6;
+        color: #1f2933;
+      }
+      header {
+        background: linear-gradient(135deg, #0b5394, #073763);
+        color: #fff;
+        padding: 2rem 1.5rem;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+      }
+      main {
+        max-width: 960px;
+        margin: -2rem auto 3rem auto;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 10px 35px rgba(15, 23, 42, 0.2);
+        padding: 2.5rem;
+      }
+      .card {
+        background: #f8fafc;
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #d9e2ec;
+      }
+      .actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      input[type="text"],
+      select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        border: 1px solid #9fb3c8;
+        font-size: 1rem;
+      }
+      button {
+        background: #0b5394;
+        color: #fff;
+        border: none;
+        padding: 0.75rem 1.75rem;
+        border-radius: 10px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 120ms ease, box-shadow 120ms ease;
+      }
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(11, 83, 148, 0.25);
+      }
+      .error {
+        background: rgba(239, 68, 68, 0.1);
+        color: #b91c1c;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(239, 68, 68, 0.25);
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.35rem 0.6rem;
+        margin-right: 0.4rem;
+        margin-bottom: 0.4rem;
+        border-radius: 6px;
+        background: #0b5394;
+        color: #fff;
+        font-size: 0.85rem;
+      }
+      .subtle {
+        color: #52606d;
+        font-size: 0.95rem;
+      }
+      ul {
+        padding-left: 1.25rem;
+      }
+      footer {
+        text-align: center;
+        color: #7b8794;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+      }
+      @media (max-width: 600px) {
+        main { padding: 1.5rem; margin-top: -1rem;}
+        header { padding: 1.5rem 1rem;}
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>MAC Course Pathfinder</h1>
+      <p>Your hybrid advisor for Windsor's Master of Applied Computing.</p>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+    <footer>
+      Built with a hybrid (content + collaborative) recommender powered by the synthetic MAC dataset.
+    </footer>
+  </body>
+</html>
+
+

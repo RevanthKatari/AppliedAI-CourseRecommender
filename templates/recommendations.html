@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="card">
+    <h2>Recommended Courses{% if student %} for {{ student.student_id }}{% endif %}</h2>
+    {% if context == "history" %}
+      <p class="subtle">
+        Blending your completed coursework with peers who share similar trajectories.
+      </p>
+    {% else %}
+      <p class="subtle">
+        Curated from the interest signals you just shared{% if selected_interests %}: {{ selected_interests | join(", ") }}{% endif %}.
+      </p>
+    {% endif %}
+    {% if student %}
+      <div class="card" style="margin-top:1rem;">
+        <h3>Profile Quick Glance</h3>
+        <div class="subtle">
+          <strong>Program Stream:</strong> {{ student.program_stream }} |
+          <strong>Background:</strong> {{ student.undergrad_major }} |
+          <strong>Learning Style:</strong> {{ student.learning_style }}
+        </div>
+        {% if performance %}
+          <div class="subtle" style="margin-top:0.5rem;">
+            <strong>Cumulative GPA:</strong> {{ performance.cumulative_gpa }} |
+            <strong>Last Term GPA:</strong> {{ performance.last_term_gpa }} |
+            <strong>Risk:</strong> {{ performance.risk_flag.replace("-", " ") }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+
+  {% if recommendations %}
+    {% for rec in recommendations %}
+      <section class="card">
+        <h3>{{ rec.course_code }} · {{ rec.title }}</h3>
+        <p class="subtle">{{ rec.description }}</p>
+        <p>
+          <span class="badge">{{ rec.category.title() }}</span>
+          <span class="badge">{{ rec.delivery_mode.title() }}</span>
+        </p>
+        <p class="subtle">Key skills: {{ rec.skills | join(", ") }}</p>
+        <p class="subtle">Why this course: {{ rec.explanation }}</p>
+        <div class="subtle">
+          <strong>Scores</strong> —
+          Hybrid: {{ rec.combined_score }} |
+          Content: {{ rec.content_score }} |
+          Collaborative: {{ rec.collab_score }}
+        </div>
+      </section>
+    {% endfor %}
+  {% else %}
+    <section class="card">
+      <p class="error">
+        We could not assemble confident matches. Try selecting a broader mix of interests or check back after you complete additional courses.
+      </p>
+    </section>
+  {% endif %}
+
+  <div class="actions">
+    <form method="get" action="/">
+      <button type="submit">Start Over</button>
+    </form>
+  </div>
+{% endblock %}
+
+

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="card">
+    <h2>Start with your MAC student ID</h2>
+    <p class="subtle">
+      Enter your synthetic student number (e.g., <code>STU-0007</code>). We will look up your academic history and
+      craft a personalised course path. New students can jump in by sharing interests after this step.
+    </p>
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="post" class="card">
+      <label for="student_id" class="subtle">Student ID</label>
+      <input type="text" id="student_id" name="student_id" placeholder="STU-00XX" autocomplete="off">
+      <div class="actions">
+        <button type="submit">Find My Path</button>
+      </div>
+    </form>
+  </section>
+  <section class="card">
+    <h3>What happens next?</h3>
+    <ul>
+      <li>Students with prior MAC course work receive a hybrid recommendation that blends their history with lookalike peers.</li>
+      <li>New or cold-start students curate interests so that we can match them with relevant skill builders.</li>
+      <li>Every suggestion lists the top skills and peer uptake to keep the rationale transparent.</li>
+    </ul>
+  </section>
+{% endblock %}
+
+

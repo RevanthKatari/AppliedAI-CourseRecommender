@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="card">
+    <h2>Let's capture your interests</h2>
+    {% if missing_student %}
+      <p class="error">
+        We did not find <strong>{{ student_id }}</strong> in the existing roster. No worries — share your focus areas and we will tailor courses anyway.
+      </p>
+    {% elif missing_history %}
+      <p class="subtle">
+        We found {{ student.student_id }} ({{ student.undergrad_major }} major), but no completed courses yet.
+        Tell us what you want to explore so we can build a cold-start pathway.
+      </p>
+    {% else %}
+      <p class="subtle">
+        Refresh your preferences to refine future suggestions.
+      </p>
+    {% endif %}
+    <form method="post" action="/interests">
+      <input type="hidden" name="student_id" value="{{ student_id }}">
+      <fieldset style="border:none; padding:0; margin:1rem 0;">
+        <legend class="subtle">Pick at least three areas that resonate with you.</legend>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:0.5rem;">
+          {% for interest in interest_catalog %}
+            <label class="card" style="display:flex; align-items:center; gap:0.5rem; margin:0;">
+              <input type="checkbox"
+                     name="interests"
+                     value="{{ interest }}"
+                     {% if interest in preset_interests %}checked{% endif %}>
+              <span>{{ interest.replace("-", " ").title() }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+      <div class="actions">
+        <button type="submit">Build Recommendations</button>
+      </div>
+    </form>
+    {% if preset_interests %}
+      <p class="subtle">
+        Preselected based on your profile: {{ preset_interests | join(", ") }}.
+      </p>
+    {% endif %}
+  </section>
+{% endblock %}
+
+
