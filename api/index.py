@@ -1,6 +1,6 @@
 """
 Vercel serverless function handler for Flask app.
-This file loads app.py and exports the Flask app as the handler.
+This file loads main.py and exports the Flask app as the handler.
 """
 import sys
 import os
@@ -17,12 +17,12 @@ from flask import Flask
 try:
     import importlib.util
     
-    # Import app package first so app.py can import from it
+    # Import app package first so main.py can import from it
     import app
     
-    # Load app.py as a module
-    app_py_path = project_root / "app.py"
-    spec = importlib.util.spec_from_file_location("flask_app", app_py_path)
+    # Load main.py as a module (renamed from app.py to avoid conflict with app/ directory)
+    main_py_path = project_root / "main.py"
+    spec = importlib.util.spec_from_file_location("flask_app", main_py_path)
     flask_app_module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(flask_app_module)
     
@@ -51,6 +51,7 @@ except Exception as e:
             'error': str(e),
             'type': type(e).__name__,
             'project_root': str(project_root),
+            'main_py_exists': (project_root / "main.py").exists(),
             'traceback': traceback.format_exc().split('\n')[-10:]
         }), 500
     
