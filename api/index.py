@@ -15,6 +15,10 @@ try:
     # Get the Flask app instance
     app = app_module.app
     
+    # Ensure Flask can find templates (set root_path explicitly if needed)
+    if not app.template_folder or not (project_root / app.template_folder).exists():
+        app.template_folder = str(project_root / "templates")
+    
     handler = app
 except Exception as e:
     # Create a minimal error handler
