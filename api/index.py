@@ -1,16 +1,19 @@
 import sys
+import importlib.util
 from pathlib import Path
 
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 try:
-    from app import app
+    # Import app.py as a module (since 'app' is a directory, we need to load app.py directly)
+    app_py_path = project_root / "app.py"
+    spec = importlib.util.spec_from_file_location("app_module", app_py_path)
+    app_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(app_module)
     
-    # Add a test route
-    @app.route('/test')
-    def test():
-        return {'status': 'ok', 'path': str(project_root)}
+    # Get the Flask app instance
+    app = app_module.app
     
     handler = app
 except Exception as e:
