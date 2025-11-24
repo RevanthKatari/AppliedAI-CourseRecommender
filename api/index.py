@@ -1,14 +1,18 @@
-"""
-Vercel serverless function entry point for Flask app.
-"""
 import sys
 from pathlib import Path
 
-# Add parent directory to path so we can import from app.py
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Ensure we can import from the project root
+root = Path(__file__).parent.parent
+if str(root) not in sys.path:
+    sys.path.insert(0, str(root))
 
-# Import the Flask app instance from app.py
-import app as flask_app_module
+# Import Flask app
+try:
+    from app import app
+except ImportError:
+    # Alternative import if the above fails
+    import app as app_module
+    app = app_module.app
 
-# Export the Flask app for Vercel
-handler = flask_app_module.app
+# Vercel expects 'handler'
+handler = app
