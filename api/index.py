@@ -1,11 +1,15 @@
 import sys
 import importlib.util
 import traceback
+import os
 from pathlib import Path
 
 # Get project root (parent of api directory)
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
+
+# Initialize handler to None - will be set below
+handler = None
 
 try:
     # Ensure the app package is importable
@@ -54,13 +58,33 @@ except Exception as e:
     @error_app.route('/<path:path>')
     @error_app.route('/')
     def error_handler(path=''):
+        # Get more diagnostic information
+        data_dir = project_root / "data" / "synthetic"
+        templates_dir = project_root / "templates"
+        
         error_info = {
             'error': str(e),
             'type': type(e).__name__,
             'project_root': str(project_root),
             'app_py_exists': (project_root / "app.py").exists(),
-            'traceback': error_traceback.split('\n')[-10:],  # Last 10 lines
+            'data_dir_exists': data_dir.exists(),
+            'templates_dir_exists': templates_dir.exists(),
+            'cwd': os.getcwd(),
+            'python_path': sys.path[:3],  # First 3 entries
+            'traceback': error_traceback.split('\n')[-15:],  # Last 15 lines
         }
         return jsonify(error_info), 500
     
     handler = error_app
+
+# Ensure handler is always defined (fallback)
+if handler is None:
+    from flask import Flask, jsonify
+    fallback_app = Flask(__name__)
+    
+    @fallback_app.route('/<path:path>')
+    @fallback_app.route('/')
+    def fallback_handler(path=''):
+        return jsonify({'error': 'Handler initialization failed', 'project_root': str(project_root)}), 500
+    
+    handler = fallback_app
