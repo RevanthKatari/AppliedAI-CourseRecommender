@@ -1,18 +1,25 @@
 import sys
 from pathlib import Path
 
-# Ensure we can import from the project root
-root = Path(__file__).parent.parent
-if str(root) not in sys.path:
-    sys.path.insert(0, str(root))
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
 
-# Import Flask app
 try:
     from app import app
-except ImportError:
-    # Alternative import if the above fails
-    import app as app_module
-    app = app_module.app
-
-# Vercel expects 'handler'
-handler = app
+    
+    # Add a test route
+    @app.route('/test')
+    def test():
+        return {'status': 'ok', 'path': str(project_root)}
+    
+    handler = app
+except Exception as e:
+    # Create a minimal error handler
+    from flask import Flask
+    error_app = Flask(__name__)
+    
+    @error_app.route('/<path:path>')
+    def error_handler(path):
+        return {'error': str(e), 'type': type(e).__name__}, 500
+    
+    handler = error_app
